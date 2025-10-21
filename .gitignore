@@ -1,0 +1,43 @@
+## Xcode ###
+# DerivedData
+DerivedData/
+
+# Build generated
+build/
+
+# User settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+
+# Generated files
+*.moved-aside
+*.xcuserstate
+
+# Swift and Objective-C
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager (optional)
+# If you don't want to commit SPM dependencies, uncomment the following lines.
+# .swiftpm/
+# Packages/
+
+# macOS Finder junk
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
