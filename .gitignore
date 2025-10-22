@@ -8,6 +8,7 @@
 
 ### Xcode Patch ###
 
+# Keep only the essential project files
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
