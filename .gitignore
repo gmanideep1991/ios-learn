@@ -1,39 +1,24 @@
-## Xcode ###
-# DerivedData
-DerivedData/
+### Xcode ###
 
-# Build generated
-build/
+**/xcuserdata/
 
-# User settings
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-xcuserdata/
+# Xcode 8 and earlier – anywhere
+**/*.xcscmblueprint
+**/*.xccheckout
 
-# Generated files
-*.moved-aside
-*.xcuserstate
+### Xcode Patch ###
 
-# Swift and Objective-C
-*.hmap
-*.ipa
-*.dSYM.zip
-*.dSYM
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
 
-# Playgrounds
-timeline.xctimeline
-playground.xcworkspace
+# Coverage files – anywhere
+**/*.gcno
 
-# Swift Package Manager (optional)
-# If you don't want to commit SPM dependencies, uncomment the following lines.
-# .swiftpm/
-# Packages/
+# Workspace settings – anywhere under xcshareddata
+**/xcshareddata/WorkspaceSettings.xcsettings
 
 # macOS Finder junk
 .DS_Store
