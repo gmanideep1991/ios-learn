@@ -7,13 +7,26 @@
 
 import SwiftUI
 
+struct FlagImage: View {
+    var country: String
+    
+    var body: some View {
+        Image(country)
+            .clipShape(.capsule)
+            .shadow(radius: 5)
+    }
+}
+
 struct ContentView: View {
     @State private var showAlert = false
     @State var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Spain", "UK", "Ukraine", "US"].shuffled()
     @State var correctAnswer = Int.random(in: 0...2)
+    @State var selectedCountry = 0
     @State var score = 0
     @State var isAnsweredCorrectly = false
     @State var questionsAnswered = 0
+    
+    
     var body: some View {
         
         ZStack {
@@ -33,15 +46,13 @@ struct ContentView: View {
                         Text("Tap the flag of").font(.subheadline.weight(.heavy))
                             .foregroundStyle(.secondary)
                         Text(countries[correctAnswer])
-                            .font(.largeTitle.weight(.semibold))
+                            .blueLargeTitle()
                     }
                     ForEach(0..<3) { number in
                             Button {
                                 flagTapped(number)
                             } label: {
-                                Image(countries[number])
-                                    .clipShape(.capsule)
-                                    .shadow(radius: 5)
+                                FlagImage(country: countries[number])
                             }
                         }
                 }
@@ -61,12 +72,13 @@ struct ContentView: View {
             
         }
         .alert(getScoreTitle(), isPresented: $showAlert) {
-            Button("Continue", action: askQuestion)
+            Button(isGameOver() ? "New Game" : "Continue", action: askQuestion)
         } message: {
             getAlertMessage()
         }
     }
     func flagTapped(_ number: Int) {
+        selectedCountry = number
         isAnsweredCorrectly = number == correctAnswer
         updateScore()
         showAlert = true
@@ -91,7 +103,7 @@ struct ContentView: View {
             if isAnsweredCorrectly {
                 return Text("Score: \(score)")
             } else {
-                return Text("That was \(countries[correctAnswer]).")
+                return Text("That was \(countries[selectedCountry]).")
             }
         }
     }
@@ -120,6 +132,18 @@ struct ContentView: View {
     func shuffleQuestions() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+}
+struct Title: ViewModifier {
+    func body(content: Content) -> some View {
+        content.font(.largeTitle)
+            .foregroundColor(.blue)
+            .fontWeight(.semibold)
+    }
+}
+extension View {
+    func blueLargeTitle() -> some View {
+        modifier(Title())
     }
 }
 
