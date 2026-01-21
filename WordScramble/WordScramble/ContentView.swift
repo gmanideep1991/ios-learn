@@ -33,6 +33,11 @@ struct ContentView: View {
             }
             .onAppear(perform: startGame)
             .navigationTitle(rootWord)
+            .toolbar{
+                Button("New Game"){
+                    startGame()
+                }
+            }
             
         }.alert(errorTitle, isPresented: $showingError) { } message: {
             Text(errorMessage)
@@ -80,8 +85,9 @@ struct ContentView: View {
                 rootWord = allWords.randomElement() ?? "silkworm"
                 
                 // If we are here everything has worked, so we can exit
+                usedWords = []
                 return
-            }
+            } 
         }
         
         // If were are *here* then there was a problem – trigger a crash and report the error

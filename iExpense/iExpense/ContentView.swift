@@ -1,0 +1,150 @@
+//
+//  ContentView.swift
+//  iExpense
+//
+//  Created by Manideep Gattamaneni on 12/22/25.
+//
+
+import Observation
+import SwiftUI
+
+struct ContentView: View {
+    @State private var expenses: Expenses = Expenses()
+    @State private var showAddExpense: Bool = false
+    var body: some View {
+        NavigationStack {
+            List {
+//                ForEach(expenses.items) { item in
+//                    HStack {
+//                        VStack(alignment: .leading) {
+//                            Text(item.name)
+//                                .font(.headline)
+//                            Text(item.type)
+//                        }
+//
+//                        Spacer()
+//                        Text(item.amount, format: .localCurrencyOrUSD)
+//                            .foregroundColor(
+//                                item.amount < 10
+//                                    ? .green
+//                                    : item.amount < 100 ? .indigo : .red
+//                            )
+//                    }
+//                }
+//                .onDelete(perform: removeItems)
+                
+                Section("Business Expenses"){
+                    if(expenses.getBusinessItems().isEmpty){
+                        Text("No Business Expenses to show")
+                    }
+                    ForEach(expenses.getBusinessItems()) { item in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(item.name)
+                                    .font(.headline)
+                            }
+
+                            Spacer()
+                            Text(item.amount, format: .localCurrencyOrUSD)
+                                .foregroundColor(
+                                    item.amount < 10
+                                        ? .green
+                                        : item.amount < 100 ? .indigo : .red
+                                )
+                        }
+                    }
+                    .onDelete(perform: removeBusinessItem)
+                }
+                
+                Section("Personal Expenses"){
+                    if(expenses.getPersonalItems().isEmpty){
+                        Text("No Personal Expenses to show")
+                    }
+                    ForEach(expenses.getPersonalItems()) { item in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(item.name)
+                                    .font(.headline)
+                            }
+
+                            Spacer()
+                            Text(item.amount, format: .localCurrencyOrUSD)
+                                .foregroundColor(
+                                    item.amount < 10
+                                        ? .green
+                                        : item.amount < 100 ? .indigo : .red
+                                )
+                        }
+                    }
+                    .onDelete(perform: removePersonalItem)
+                }
+            }
+            .navigationTitle("iExpense")
+            .toolbar {
+                Button("Add Expense", systemImage: "plus") {
+                    showAddExpense = true
+                }
+            }
+        }.sheet(isPresented: $showAddExpense) {
+            AddView(expenses: expenses)
+        }
+
+    }
+//    func removeItems(at offsets: IndexSet) {
+//        expenses.items.remove(atOffsets: offsets)
+//    }
+    
+    func removeBusinessItem(at offsets: IndexSet) {
+        if let index = offsets.first {
+            let item = expenses.getBusinessItems()[index]
+            expenses.items.removeAll{$0.id == item.id}
+        }
+    }
+    
+    func removePersonalItem(at offsets: IndexSet) {
+        if let index = offsets.first {
+            let item = expenses.getPersonalItems()[index]
+            expenses.items.removeAll{$0.id == item.id}
+        }
+    }
+}
+
+@Observable
+class Expenses {
+    var items = [ExpenseItem]() {
+        didSet {
+            if let encoded = try? JSONEncoder().encode(items) {
+                UserDefaults.standard.set(encoded, forKey: "expenses")
+            }
+        }
+    }
+    init() {
+        if let savedExpenses = UserDefaults.standard.data(forKey: "expenses") {
+            if let decodedExpenses = try? JSONDecoder().decode(
+                [ExpenseItem].self,
+                from: savedExpenses
+            ) {
+                items = decodedExpenses
+                return
+            }
+        }
+        items = []
+    }
+    func getBusinessItems() -> [ExpenseItem] {
+        return items.filter { $0.type == ExpenseType.Business.rawValue }
+    }
+    func getPersonalItems() -> [ExpenseItem] {
+        return items.filter { $0.type == ExpenseType.Personal.rawValue }
+    }
+}
+
+struct ExpenseItem: Codable, Identifiable {
+    var id = UUID()
+    let name: String
+    let type: String
+    let amount: Double
+}
+
+#Preview {
+    ContentView()
+}
