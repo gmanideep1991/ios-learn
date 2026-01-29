@@ -10,29 +10,9 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var expenses: Expenses = Expenses()
-    @State private var showAddExpense: Bool = false
     var body: some View {
         NavigationStack {
             List {
-//                ForEach(expenses.items) { item in
-//                    HStack {
-//                        VStack(alignment: .leading) {
-//                            Text(item.name)
-//                                .font(.headline)
-//                            Text(item.type)
-//                        }
-//
-//                        Spacer()
-//                        Text(item.amount, format: .localCurrencyOrUSD)
-//                            .foregroundColor(
-//                                item.amount < 10
-//                                    ? .green
-//                                    : item.amount < 100 ? .indigo : .red
-//                            )
-//                    }
-//                }
-//                .onDelete(perform: removeItems)
-                
                 Section("Business Expenses"){
                     if(expenses.getBusinessItems().isEmpty){
                         Text("No Business Expenses to show")
@@ -79,20 +59,17 @@ struct ContentView: View {
                     .onDelete(perform: removePersonalItem)
                 }
             }
+            NavigationLink("Add Expense"){
+                AddView(expenses: expenses)
+            }
             .navigationTitle("iExpense")
             .toolbar {
-                Button("Add Expense", systemImage: "plus") {
-                    showAddExpense = true
+                NavigationLink(destination: AddView(expenses: expenses)){
+                    Image(systemName: "plus")
                 }
             }
-        }.sheet(isPresented: $showAddExpense) {
-            AddView(expenses: expenses)
         }
-
     }
-//    func removeItems(at offsets: IndexSet) {
-//        expenses.items.remove(atOffsets: offsets)
-//    }
     
     func removeBusinessItem(at offsets: IndexSet) {
         if let index = offsets.first {
