@@ -14,9 +14,7 @@ struct MissionListView: View {
         
                 LazyVStack{
                     ForEach(missions) { mission in
-                        NavigationLink{
-                            MissionView(mission: mission, astronauts: astronauts)
-                        } label: {
+                        NavigationLink(value: mission){
                             HStack{
                                 Image(mission.image)
                                     .resizable()
@@ -39,6 +37,9 @@ struct MissionListView: View {
                         }
                     }
                 }.padding([.horizontal, .bottom])
+            .navigationDestination(for: Mission.self){mission in
+                MissionView(mission: mission, astronauts: astronauts)
+            }
             
     }
 }
